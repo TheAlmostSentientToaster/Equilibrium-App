@@ -1,11 +1,15 @@
-﻿namespace Equilibrium_App
+﻿using Microsoft.Extensions.Options;
+
+namespace Equilibrium_App
 {
     public partial class MainPage : ContentPage
     {
         private HttpClient httpClient = new HttpClient();
+        private readonly Configuration.AppSettings _settings;
 
-        public MainPage()
+        public MainPage(IOptions<Configuration.AppSettings> options)
         {
+            _settings = options.Value;
             InitializeComponent();
         }
 
@@ -18,8 +22,8 @@
         {
             try
             {
-                string jsonContent = $"{{\"content\": \"ping\", \"user_id\": {Settings.dummyUserID}, \"user_name\": \"{Settings.dummyUsername}\", \"chat_id\": {Settings.dummyChatID}}}";
-                HttpResponseMessage response = await httpClient.PostAsync($"http://{Settings.dummyIP}:{Settings.dummyPort}/command", new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json"));
+                string jsonContent = $"{{\"content\": \"ping\", \"user_id\": {_settings.DummyUserID}, \"user_name\": \"{_settings.DummyUserName}\", \"chat_id\": {_settings.DummyChatID}}}";
+                HttpResponseMessage response = await httpClient.PostAsync($"http://{_settings.DummyIP}:{_settings.DummyPort}/command", new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode)
                 {
