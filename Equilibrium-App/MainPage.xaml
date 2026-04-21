@@ -4,7 +4,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Equilibrium_App.MainPage">
 
-    <ScrollView>
+    
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
@@ -14,29 +14,32 @@
                 Aspect="AspectFit"
                 SemanticProperties.Description="dot net bot in a submarine number ten" />
 
-            <toolkit:Expander>
-                <!-- Header = das "Dropdown" -->
-                <toolkit:Expander.Header>
-                    <Label Text="Dropdown öffnen"
-                       FontSize="18"
-                       BackgroundColor="LightGray"
-                       Padding="10" />
-                </toolkit:Expander.Header>
+            <CollectionView
+                ItemsSource="{Binding Items}"
+                HeightRequest="400">
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <toolkit:Expander
+                            HorizontalOptions="Fill"
+                            Margin="0,5">
 
-                <!-- Content = erscheint beim Öffnen -->
-                <toolkit:Expander.Content>
-                    <HorizontalStackLayout Spacing="10" Padding="10">
+                            <toolkit:Expander.Header>
+                                <Label Text="{Binding Title}" />
+                            </toolkit:Expander.Header>
 
-                        <Image Source="dotnet_bot.png"
-                           WidthRequest="50"
-                           HeightRequest="50" />
+                            <toolkit:Expander.Content>
+                                <HorizontalStackLayout Spacing="10">
+                                    <Image Source="{Binding Image}" WidthRequest="50" />
+                                    <Label Text="{Binding Description}" />
+                                </HorizontalStackLayout>
+                            </toolkit:Expander.Content>
 
-                        <Label Text="Das ist mein Text neben dem Bild"
-                           VerticalOptions="Center" />
-
-                    </HorizontalStackLayout>
-                </toolkit:Expander.Content>
-            </toolkit:Expander>
+                        </toolkit:Expander>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                
+            </CollectionView>
 
             <Button
                 x:Name="CounterBtn"
@@ -44,7 +47,13 @@
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill" />
+            
+            <Button
+                x:Name="ExpanderBtn"
+                Text="Add Expander"
+                SemanticProperties.Hint="Adds another Expander"
+                Clicked="OnExpanderAdderClicked"
+                HorizontalOptions="Fill" />
         </VerticalStackLayout>
-    </ScrollView>
 
 </ContentPage>
