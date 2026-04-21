@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Collections.ObjectModel;
 
 namespace Equilibrium_App
 {
@@ -6,11 +7,28 @@ namespace Equilibrium_App
     {
         private HttpClient httpClient = new HttpClient();
         private readonly Configuration.AppSettings _settings;
+        public ObservableCollection<Item> Items { get; set; } = new ObservableCollection<Item>
+        {
+            new Item
+            {
+                Title = "Eintrag 1",
+                Image = "dotnet_bot.png",
+                Description = "Das ist eine Beschreibung"
+            },
+            new Item
+            {
+                Title = "Eintrag 2",
+                Image = "dotnet_bot.png",
+                Description = "Noch eine Beschreibung"
+            }
+        };
 
         public MainPage(IOptions<Configuration.AppSettings> options)
         {
             _settings = options.Value;
             InitializeComponent();
+            System.Diagnostics.Debug.WriteLine($"Items count: {Items.Count}");
+            BindingContext = this;
         }
 
         private void OnCounterClicked(object? sender, EventArgs e)
@@ -42,6 +60,18 @@ namespace Equilibrium_App
             {
                 await DisplayAlertAsync("Error", "An error occurred: " + ex.Message, "OK");
             }
+        }
+
+        private void OnExpanderAdderClicked(object sender, EventArgs e)
+        {
+            Item item = new Item
+            {
+                Title = "Dynamischer Eintrag",
+                Image = "dotnet_bot.png",
+                Description = "Noch eine Beschreibung"
+            };
+
+            Items.Add(item);
         }
     }
 }
