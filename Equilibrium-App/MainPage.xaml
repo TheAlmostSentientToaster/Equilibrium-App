@@ -16,20 +16,22 @@
 
             <CollectionView
                 ItemsSource="{Binding Items}"
-                HeightRequest="400">
+                HeightRequest="300">
                 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <toolkit:Expander
                             HorizontalOptions="Fill"
-                            Margin="0,5">
+                            Margin="0,01">
 
                             <toolkit:Expander.Header>
-                                <Label Text="{Binding Title}" />
+                            <Label Text="{Binding Title}"
+                                BackgroundColor="Gray" />
                             </toolkit:Expander.Header>
 
                             <toolkit:Expander.Content>
-                                <HorizontalStackLayout Spacing="10">
+                            <HorizontalStackLayout Spacing="10"
+                                BackgroundColor="LightGray">
                                     <Image Source="{Binding Image}" WidthRequest="50" />
                                     <Label Text="{Binding Description}" />
                                 </HorizontalStackLayout>
@@ -54,6 +56,18 @@
                 SemanticProperties.Hint="Adds another Expander"
                 Clicked="OnExpanderAdderClicked"
                 HorizontalOptions="Fill" />
-        </VerticalStackLayout>
+
+            <Button
+                Text="📷"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30"
+                BackgroundColor="DodgerBlue"
+                TextColor="White"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="20"
+                Clicked="OnCameraButtonClicked"/>
+    </VerticalStackLayout>
 
 </ContentPage>
