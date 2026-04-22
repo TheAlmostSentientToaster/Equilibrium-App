@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Media;
 
 namespace Equilibrium_App
 {
@@ -7,27 +8,12 @@ namespace Equilibrium_App
     {
         private HttpClient httpClient = new HttpClient();
         private readonly Configuration.AppSettings _settings;
-        public ObservableCollection<Item> Items { get; set; } = new ObservableCollection<Item>
-        {
-            new Item
-            {
-                Title = "Eintrag 1",
-                Image = "dotnet_bot.png",
-                Description = "Das ist eine Beschreibung"
-            },
-            new Item
-            {
-                Title = "Eintrag 2",
-                Image = "dotnet_bot.png",
-                Description = "Noch eine Beschreibung"
-            }
-        };
+        public ObservableCollection<Item> Items { get; set; } = new ObservableCollection<Item>();
 
         public MainPage(IOptions<Configuration.AppSettings> options)
         {
             _settings = options.Value;
             InitializeComponent();
-            System.Diagnostics.Debug.WriteLine($"Items count: {Items.Count}");
             BindingContext = this;
         }
 
@@ -67,11 +53,32 @@ namespace Equilibrium_App
             Item item = new Item
             {
                 Title = "Dynamischer Eintrag",
-                Image = "dotnet_bot.png",
                 Description = "Noch eine Beschreibung"
             };
 
             Items.Add(item);
+        }
+
+        private async void OnCameraButtonClicked(object sender, EventArgs e)
+        {
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                var photo = await MediaPicker.Default.CapturePhotoAsync();
+
+                if (photo != null)
+                {
+                    var stream = await photo.OpenReadAsync();
+
+                    Item item = new Item
+                    {
+                        Title = "Foto Eintrag",
+                        Image = ImageSource.FromStream(() => stream),
+                        Description = "Ein Eintrag mit einem Foto"
+                    };
+
+                    Items.Add(item);
+                }
+            }
         }
     }
 }
