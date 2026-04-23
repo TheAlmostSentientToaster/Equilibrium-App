@@ -22,7 +22,7 @@
                     <DataTemplate>
                         <toolkit:Expander
                             HorizontalOptions="Fill"
-                            Margin="0,01">
+                            Margin="0,1">
 
                             <toolkit:Expander.Header>
                             <Label Text="{Binding Title}"

@@ -69,14 +69,33 @@ namespace Equilibrium_App
                 {
                     var stream = await photo.OpenReadAsync();
 
+                    byte[] imageBytes;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await stream.CopyToAsync(memoryStream);
+                        imageBytes = memoryStream.ToArray();
+                    }
+                    string base64Image = Convert.ToBase64String(imageBytes);
+
+                    string jsonContent = $"{{\"photo_data\": \"{base64Image}\", \"user_id\": {_settings.DummyUserID}, \"user_name\": \"{_settings.DummyUserName}\", \"chat_id\": {_settings.DummyChatID}}}";
+                    HttpResponseMessage response = await httpClient.PostAsync($"http://{_settings.DummyIP}:{_settings.DummyPort}/photo", new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json"));
+
                     Item item = new Item
                     {
                         Title = "Foto Eintrag",
-                        Image = ImageSource.FromStream(() => stream),
+                        Image = ImageSource.FromStream(() => new MemoryStream(imageBytes)),
                         Description = "Ein Eintrag mit einem Foto"
                     };
 
-                    Items.Add(item);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Items.Add(item);
+                    }
+                    else
+                    {
+                        var errorContent = await response.Content.ReadAsStringAsync();
+                        await DisplayAlertAsync("Error", "Photo upload failed with status code: " + response.StatusCode, "OK");
+                    }
                 }
             }
         }
